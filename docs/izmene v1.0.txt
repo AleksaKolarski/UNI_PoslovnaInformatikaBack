@@ -1,0 +1,20 @@
+- Malo je samo vizuelno ispremestan, nista strasno
+1. Sve prevedeno na engleski, ako se neko ne slaze sa nekim od prevoda nek predlozi bolje, ni ja nisam siguran u neke
+2. svi varcharovi stavljeni na 255 ili 25 zbog neke uniformnosti, da ne pamtimo sad koliko koja rec ima karaktera, nije bitno
+	255 vs 256 - https://stackoverflow.com/questions/2340639/why-historically-do-people-use-255-not-256-for-database-field-magnitudes
+3. Dodat Role entitet koji predstavlja rolu usera. Pricali smo onda da treba imati bar dve grupe, dogovoricemo se sta koja radi
+4. Dodat pocetni datum i krajnji datum poslovnoj godini (Fiscal Year) buduci da jedna poslovna godina nije striktno vezana za kalendarsku
+
+Pitanja:
+1. Dodati entitet DocumentType koji predstavlja tip dokumenta (primka, otpremnica, popisna korekcija...)
+	 Ima smisla da ne bude poseban entitet, ali tih tipova dokumenata moze biti jos naknadno??
+	 Takodje bi se koristio u Analitici Robne Kartice (ArticleCardAnalytics) al onda ne bi
+	 imalo smisla da se zove DocumentType
+2. Ovaj BusinessPartner (poslovni partner) ima polje koje se zove tip??? nemam pojma sta je  
+3. ArticleCardAnalysis ima serijski broj, jel nam treba to?? Cemu sluzi??
+4. Document (Prometni dokument) ima polje 'status', to moze biti 'u formiranju', 
+	'formiran', 'uknjizen'??? i ko zna sta jos, mozda i to poseban entitet? lol, ne stvarno
+5. Za money tip - mozemo koristiti:
+	- double - nije precizan, ne preporucuje se
+	- BigDecimal - precizan, preporucuje se, ali je malo teze raditi sa njim jer java, operatori nisu pregazeni
+	
