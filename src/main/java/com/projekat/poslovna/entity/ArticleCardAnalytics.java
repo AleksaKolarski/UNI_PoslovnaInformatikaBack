@@ -8,15 +8,29 @@ package com.projekat.poslovna.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class ArticleCardAnalytics {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private int serialNumber; // da li je ovo potrebno uopste????
+	private int serialNumber; // da li je ovo potrebno uopste???? // TODO ovo valjda unique???
 	private char type; // TODO type neka stoji char za sad, ovo bi trebali menjat;
 	private char direction; // TODO mozda da stavimo boolean??? directionIn, pa ako je true onda je ulazna
 	private int quantity;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal price;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal value;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private ArticleCard articleCard;
 
 	public int getId() {

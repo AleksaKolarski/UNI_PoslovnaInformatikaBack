@@ -2,15 +2,41 @@ package com.projekat.poslovna.entity;
 
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.Email;
+
+@Entity
 public class Employee {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	
+	@Column(length=25, nullable=false) 
 	private String firstName;
+	@Column(length=25, nullable=false) 
 	private String lastName;
+	@Column(length=25, unique=true, nullable=false) 
+	@Email
 	private String email;
+	@Column(length=25, nullable=false) 
 	private String password;
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="role", nullable=false)
 	private Role role;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="company", nullable=false)
 	private Company company;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="warehouse", nullable=false)
 	private Warehouse warehouse;
 
 	public int getId() {

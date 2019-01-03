@@ -3,13 +3,28 @@ package com.projekat.poslovna.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class DocumentItem {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private int quantity;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal price;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal value;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Article article;
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Document document;
 
 	public int getId() {

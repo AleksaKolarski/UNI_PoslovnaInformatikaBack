@@ -5,15 +5,34 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class FiscalYear {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	@Column
 	private int year;
+	@Column(columnDefinition="boolean default false")
 	private boolean concluded;
+	@Column
 	private Timestamp startedOn;
+	@Column
 	private Timestamp endedOn;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Company company;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="fiscalYear")
 	private Set<ArticleCard> articleCards = new HashSet<>();
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="fiscalYear")
 	private Set<Document> documents = new HashSet<>();
 
 	public int getId() {

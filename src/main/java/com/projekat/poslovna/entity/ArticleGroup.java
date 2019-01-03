@@ -4,11 +4,26 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class ArticleGroup {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
+	@Column(length=255, unique=true, nullable=false)
 	private String name;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Company company;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="articleGroup")
 	private Set<Article> articles = new HashSet<>();
 
 	public int getId() {

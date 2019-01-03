@@ -9,14 +9,35 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Warehouse {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false, length = 255)
 	private String name;
+	@Column(nullable = false, length = 255)
 	private String address;
 
+
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Company company;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="warehouse")
 	private Set<ArticleCard> articleCards = new HashSet<>();
+	// TODO ovde treba dokumente uputiti ka 'obaveznim' skladistima i ka optional
+	// mislim na razliku izmedju poslovanja sa poslovnim partnerima i medjumagacinskog poslovanja
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="warehouse")
 	private Set<Document> documents = new HashSet<>();
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="warehouse")
 	private Set<Employee> employees = new HashSet<>();
 
 	public int getId() {

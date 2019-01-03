@@ -4,16 +4,38 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Company {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false, length = 255)
 	private String name;
+	@Column(nullable = false, length = 9)
 	private String PIB;
+	@Column(nullable = false, length = 255)
 	private String address;
 
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="city", nullable=false)
 	private City city;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="company")
 	private Set<ArticleGroup> articleGroups = new HashSet<>();
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="company")
 	private Set<FiscalYear> fiscalYears = new HashSet<>();
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="company")
 	private Set<Warehouse> warehouses = new HashSet<>();
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="company")
 	private Set<Employee> employees = new HashSet<>();
 
 	public int getId() {

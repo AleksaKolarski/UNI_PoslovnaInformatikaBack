@@ -14,25 +14,52 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class ArticleCard {
-	private int id;
-	private int price;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+@Entity
+public class ArticleCard {
+	// TODO resi mapiranje tipova , treba koristiti money
+	// TODO ova tabela sme imati samo jedan jedini red u nekom trenutku, jedan ili nijedan u nekim situacijama
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	@Column(nullable= false, precision=10, scale=2)
+	private BigDecimal price;
+
+	@Column
 	private int startStateQuantity;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal startStateValue;
 
+	@Column
 	private int inQuantity;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal inValue;
 
+	@Column
 	private int outQuantity;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal outValue;
 
+	@Column
 	private int sumQuantity;
+	@Column(nullable= false, precision=10, scale=2)
 	private BigDecimal sumValue;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Article article;
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private FiscalYear fiscalYear;
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Warehouse warehouse;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="articleCard")
 	private Set<ArticleCardAnalytics> articleCardAnalytics = new HashSet<>();
 
 	public int getId() {
@@ -43,11 +70,11 @@ public class ArticleCard {
 		this.id = id;
 	}
 
-	public int getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

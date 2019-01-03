@@ -5,13 +5,24 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 /**
  * Prometni dokument
  * 
  * @author alowishusad
  *
  */
+@Entity
 public class Document {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private char type; // TODO ovaj tip bi mogao biti poseban entitet, takodje u analitici robne
 						// kartice
@@ -22,11 +33,16 @@ public class Document {
 
 	// samo jedan od ova dva bi smeo biti not null!! to ce neki trigger na bazi
 	// ili...
+	@ManyToOne(fetch=FetchType.LAZY)
 	private BusinessPartner businessPartner;
+	@ManyToOne(fetch=FetchType.LAZY)
 	private Warehouse warehouse;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Warehouse mandatoryWarehouse; // moramo imati bar jedan warehouse
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private FiscalYear fiscalYear;
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="document")
 	private Set<DocumentItem> documentItems = new HashSet<>();
 
 	public int getId() {

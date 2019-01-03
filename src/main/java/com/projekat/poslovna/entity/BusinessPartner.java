@@ -4,15 +4,33 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class BusinessPartner {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	// private char type; ovo nisam siguran sta je uopste
+	// TODO private char type; ovo nisam siguran sta je uopste
+	@Column(length=255, nullable=false)
 	private String name;
+	@Column(length=9, nullable=false)
 	private String PIB;
+	@Column(length=255, nullable=false)
 	private String address;
 
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private City city;
+	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Company company; // partner kog preduzeca, moze ih biti vise
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="businessPartner")
 	private Set<Document> documents = new HashSet<>();
 
 	public int getId() {
