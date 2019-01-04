@@ -1,0 +1,10 @@
+1.) Da li je potrebno implementirati logicko brisanje? (delete polje u entitetima)
+2.) Da li je potrebno koristiti PagingAndSortingRepository?
+3.) Paginacija i validacija?
+4.) Gde drzati biznis logiku? Kontroler, servisni sloj, poseban BLL sloj?
+5.) Problem : Treba obezbediti da vise firmi moze da koristi istu bazu bez sranja.
+	Treba obezbediti da se svaki upit ka bazi odnosi na samo jednu firmu,
+	odnosno Company jer ne bi smeli da pristupaju medjusobno. Kako to izvesti?
+	Da li uz svaki repository poziv prosledjivati Company id pa tako?
+6.) Da li dodati Manager sloj (nije toliko bitno, cisto radi diskusije)?
+	https://stackoverflow.com/questions/15757496/what-is-the-correct-way-of-using-layers-in-web-application

@@ -23,6 +23,7 @@ public class ArticleGroup {
 
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Company company;
+	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="articleGroup")
 	private Set<Article> articles = new HashSet<>();
 

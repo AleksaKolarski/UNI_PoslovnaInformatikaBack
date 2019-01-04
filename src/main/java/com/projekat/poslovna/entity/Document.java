@@ -24,14 +24,13 @@ public class Document {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
-	private char type; // TODO ovaj tip bi mogao biti poseban entitet, takodje u analitici robne
-						// kartice
+	private char type; // TODO ovaj tip bi mogao biti poseban entitet, takodje u analitici robne kartice
 	private int serialNumber; // TODO sta je ovo????
 	private Timestamp formedOn;
 	private Timestamp bookedOn;
 	private char status; // TODO takodje bi ovaj status mogao biti poseban entitet????
 
-	// samo jedan od ova dva bi smeo biti not null!! to ce neki trigger na bazi
+	// TODO samo jedan od ova dva bi smeo biti not null!! to ce neki trigger na bazi
 	// ili...
 	@ManyToOne(fetch=FetchType.LAZY)
 	private BusinessPartner businessPartner;
@@ -42,6 +41,7 @@ public class Document {
 	private Warehouse mandatoryWarehouse; // moramo imati bar jedan warehouse
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private FiscalYear fiscalYear;
+	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="document")
 	private Set<DocumentItem> documentItems = new HashSet<>();
 

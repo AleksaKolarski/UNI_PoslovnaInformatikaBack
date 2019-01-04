@@ -26,7 +26,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class ArticleCard {
 	// TODO resi mapiranje tipova , treba koristiti money
-	// TODO ova tabela sme imati samo jedan jedini red u nekom trenutku, jedan ili nijedan u nekim situacijama
+	// TODO mozemo zabraniti insert 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -59,6 +59,7 @@ public class ArticleCard {
 	private FiscalYear fiscalYear;
 	@ManyToOne(fetch=FetchType.LAZY, optional=false)
 	private Warehouse warehouse;
+	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="articleCard")
 	private Set<ArticleCardAnalytics> articleCardAnalytics = new HashSet<>();
 
