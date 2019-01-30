@@ -4,16 +4,25 @@ INSERT INTO city (name) VALUES ('Beograd');
 
 INSERT INTO company (pib, address, name, city) VALUES ('514256987', 'Zrtava racije 12', 'Tim Raketa', 1);
 
-INSERT INTO role (name) VALUES ('Admin');
-INSERT INTO role (name) VALUES ('Magacioner');
+INSERT INTO role (name) VALUES ('ROLE_Admin');
+INSERT INTO role (name) VALUES ('ROLE_Magacioner');
 
 INSERT INTO warehouse (name, address, company_id) VALUES ('Skladiste 1 SEVER', 'Industrijska Zona Sever 21', 1);
 INSERT INTO warehouse (name, address, company_id) VALUES ('Skladiste 2 JUG', 'Industrijska Zona Jug 420', 1);
 
-INSERT INTO employee (first_name, last_name, email, password, company, role, warehouse) 
-	VALUES ('Milan', 'Miljus', 'milan@milan.com', '123', 1, 1, 1);
-INSERT INTO employee (first_name, last_name, email, password, company, role, warehouse) 
-	VALUES ('Marko', 'Krizan', 'markela@marko.com', '123', 1, 1, 2);
+INSERT INTO employee (first_name, last_name, email, password, company, warehouse) 
+	VALUES ('Milan', 'Miljus', 'milan@milan.com', '$2a$10$NRimrh0tQO1UdAVN5.EFVerJ3fR3GLftZctZwQHkpY9K1nKNGIvoe', 1, 1); #sifra 123
+INSERT INTO employee (first_name, last_name, email, password, company, warehouse) 
+	VALUES ('Marko', 'Krizan', 'markela@marko.com', '$2a$10$NRimrh0tQO1UdAVN5.EFVerJ3fR3GLftZctZwQHkpY9K1nKNGIvoe', 1, 2); #sifra 123
+    
+INSERT INTO employees_roles (employee_id, role_id)
+	VALUES (1, 1);
+INSERT INTO employees_roles (employee_id, role_id)
+	VALUES (1, 2);
+INSERT INTO employees_roles (employee_id, role_id)
+	VALUES (2, 1);
+INSERT INTO employees_roles (employee_id, role_id)
+	VALUES (2, 2);
 	
 INSERT INTO article_group (name, company_id) VALUES ('Kancelarijski pribor', 1);
 INSERT INTO article_group (name, company_id) VALUES ('Stocna hrana', 1);

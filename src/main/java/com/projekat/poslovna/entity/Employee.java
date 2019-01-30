@@ -1,7 +1,10 @@
 package com.projekat.poslovna.entity;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,12 +12,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
-public class Employee {
-	
+public class Employee implements UserDetails {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
@@ -26,12 +35,12 @@ public class Employee {
 	@Column(length=25, unique=true, nullable=false) 
 	@Email
 	private String email;
-	@Column(length=25, nullable=false) 
+	@Column(length=80, nullable=false) 
 	private String password;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="role", nullable=false)
-	private Role role;
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.MERGE}, fetch = FetchType.EAGER)
+	@JoinTable(name = "employees_roles", joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+	private Set<Role> roles;
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="company", nullable=false)
 	private Company company;
@@ -79,12 +88,12 @@ public class Employee {
 		this.password = password;
 	}
 
-	public Role getRole() {
-		return role;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRole(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	public Company getCompany() {
@@ -102,6 +111,15 @@ public class Employee {
 	public void setWarehouse(Warehouse warehouse) {
 		this.warehouse = warehouse;
 	}
+	
+	public boolean getIsAdmin() {
+		for(Role role: roles) {
+			if(role.getName().equals("ROLE_Admin")) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -118,5 +136,35 @@ public class Employee {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return this.roles;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

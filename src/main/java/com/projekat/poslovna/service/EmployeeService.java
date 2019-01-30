@@ -9,6 +9,8 @@ public interface EmployeeService {
 
 	Employee findById(int id);
 	
+	Employee findByEmail(String email);
+	
 	List<Employee> findByCompany(Company company);
 	
 	List<Employee> findAll();

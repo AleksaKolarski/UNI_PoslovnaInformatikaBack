@@ -4,23 +4,28 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
+
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
-public class Role {
+public class Role implements GrantedAuthority {
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(nullable = false, length = 25)
 	private String name;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="role")
+	@ManyToMany(mappedBy = "roles", cascade = {CascadeType.MERGE, CascadeType.MERGE}, fetch=FetchType.LAZY)
 	private Set<Employee> employees = new HashSet<>();
 
 	public int getId() {
@@ -37,6 +42,11 @@ public class Role {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String getAuthority() {
+		return name;
 	}
 
 	public Set<Employee> getEmployees() {

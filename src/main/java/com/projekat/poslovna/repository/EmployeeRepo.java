@@ -7,5 +7,7 @@ import com.projekat.poslovna.entity.Employee;
 
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
-
+	
+	Employee findByEmail(String email);
+	
 }
