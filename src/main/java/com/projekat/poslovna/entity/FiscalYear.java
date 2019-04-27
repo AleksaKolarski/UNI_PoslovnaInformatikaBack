@@ -1,118 +1,33 @@
 package com.projekat.poslovna.entity;
 
+import lombok.Data;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
+/**
+ * Created by milan.miljus on 2019-04-27 19:25.
+ */
 @Entity
-public class FiscalYear {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	@Column
-	private int year;
-	@Column(columnDefinition="boolean default false")
-	private boolean concluded;
-	@Column
-	private Timestamp startedOn;
-	@Column
-	private Timestamp endedOn;
+@Data
+public class FiscalYear extends BaseEntity {
 
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	private Company company;
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="fiscalYear")
-	private Set<ArticleCard> articleCards = new HashSet<>();
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="fiscalYear")
-	private Set<Document> documents = new HashSet<>();
+    @Column
+    private int year;
 
-	public int getId() {
-		return id;
-	}
+    private boolean concluded;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    private Timestamp startedOn;
 
-	public int getYear() {
-		return year;
-	}
+    private Timestamp endedOn;
 
-	public void setYear(int year) {
-		this.year = year;
-	}
+    @OneToMany(mappedBy = "fiscalYear")
+    private List<DocumentInHouse> inHouseDocuments;
 
-	public boolean isConcluded() {
-		return concluded;
-	}
+    @OneToMany(mappedBy = "fiscalYear")
+    private List<DocumentOutbound> outBoundDocuments;
 
-	public void setConcluded(boolean concluded) {
-		this.concluded = concluded;
-	}
-
-	public Timestamp getStartedOn() {
-		return startedOn;
-	}
-
-	public void setStartedOn(Timestamp startedOn) {
-		this.startedOn = startedOn;
-	}
-
-	public Timestamp getEndedOn() {
-		return endedOn;
-	}
-
-	public void setEndedOn(Timestamp endedOn) {
-		this.endedOn = endedOn;
-	}
-
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-
-	public Set<ArticleCard> getArticleCards() {
-		return articleCards;
-	}
-
-	public void setArticleCards(Set<ArticleCard> articleCards) {
-		this.articleCards = articleCards;
-	}
-
-	public Set<Document> getDocuments() {
-		return documents;
-	}
-
-	public void setDocuments(Set<Document> documents) {
-		this.documents = documents;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-
-		if (o == this)
-			return true;
-		if (!(o instanceof FiscalYear)) {
-			return false;
-		}
-		FiscalYear fiscalYear = (FiscalYear) o;
-		return id == fiscalYear.id;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
+    @OneToMany(mappedBy = "fiscalYear")
+    private List<ArticleCard> articleCards;
 }

@@ -1,5 +1,6 @@
 package com.projekat.poslovna.security;
 
+import com.projekat.poslovna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,8 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.projekat.poslovna.entity.Employee;
-import com.projekat.poslovna.service.EmployeeService;
+import java.util.Optional;
 
 
 @Service
@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Autowired
-    private EmployeeService employeeService;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -29,11 +29,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Employee employee = employeeService.findByEmail(username);
-        if (employee == null) {
-        	return null;
+        Optional<User> user = userService.findByEmail(username);
+        if (user.isPresent()) {
+        	return user.get();
         } else {
-            return employee;
+            return null;
         }
     }
 
@@ -45,13 +45,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         } else {
             return false;
         }
-        Employee employee = (Employee) loadUserByUsername(username);
-        if(employee == null) {
+        User user = (User) loadUserByUsername(username);
+        if(user == null) {
         	return false;
         }
-        employee.setPassword(passwordEncoder.encode(newPassword));
-        employee = employeeService.save(employee);
-        if(employee == null) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user = userService.save(user);
+        if(user == null) {
         	return false;
         }
         return true;

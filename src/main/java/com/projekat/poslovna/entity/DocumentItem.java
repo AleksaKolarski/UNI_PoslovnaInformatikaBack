@@ -1,95 +1,31 @@
 package com.projekat.poslovna.entity;
 
-import java.math.BigDecimal;
-import java.util.Objects;
+import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
+/**
+ * Created by milan.miljus on 2019-04-27 19:21.
+ */
 @Entity
-public class DocumentItem {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	private int quantity;
-	@Column(nullable= false, precision=10, scale=2)
-	private BigDecimal price;
-	@Column(nullable= false, precision=10, scale=2)
-	private BigDecimal value;
+@Data
+public class DocumentItem extends BaseEntity {
 
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	private Article article;
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	private Document document;
+    @Size(min = 1)
+    private int quantity;
 
-	public int getId() {
-		return id;
-	}
+    private int price;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    private int value;
 
-	public int getQuantity() {
-		return quantity;
-	}
+    @ManyToOne
+    private Article article;
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-	public BigDecimal getValue() {
-		return value;
-	}
-
-	public void setValue(BigDecimal value) {
-		this.value = value;
-	}
-
-	public Article getArticle() {
-		return article;
-	}
-
-	public void setArticle(Article article) {
-		this.article = article;
-	}
-
-	public Document getDocument() {
-		return document;
-	}
-
-	public void setDocument(Document document) {
-		this.document = document;
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-
-		if (o == this)
-			return true;
-		if (!(o instanceof DocumentItem)) {
-			return false;
-		}
-		DocumentItem documentItem = (DocumentItem) o;
-		return id == documentItem.id;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
+//    nema vezu ka dokumentu, vec dobija po tabelu za svakog naslednika Document-a
+//    create table document_in_house (id binary(255) not null, created_ti........
+//    create table document_in_house_document_items (document_in_house_id......
+//    create table document_outbound (id binary(255) not null, created_ti....
+//    create table document_outbound_document_items (document_outbound_id..
 }

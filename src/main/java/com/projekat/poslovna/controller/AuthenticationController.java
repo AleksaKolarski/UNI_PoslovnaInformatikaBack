@@ -1,5 +1,6 @@
 package com.projekat.poslovna.controller;
 
+import com.projekat.poslovna.security.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projekat.poslovna.entity.Employee;
 import com.projekat.poslovna.security.CustomUserDetailsService;
 import com.projekat.poslovna.security.TokenHelper;
 
@@ -49,8 +49,8 @@ public class AuthenticationController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		// Kreiraj token
-		Employee employee = (Employee) authentication.getPrincipal();
-		String jws = tokenHelper.generateToken(employee.getEmail());
+		User user = (User) authentication.getPrincipal();
+		String jws = tokenHelper.generateToken(user.getEmail());
 
 		// Vrati token kao odgovor na uspesno autentifikaciju
 		return new ResponseEntity<String>(jws, HttpStatus.OK);

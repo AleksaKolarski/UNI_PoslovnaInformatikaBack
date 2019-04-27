@@ -2,17 +2,9 @@ package com.projekat.poslovna.service;
 
 import java.util.List;
 
-import com.projekat.poslovna.entity.Role;
+import com.projekat.poslovna.entity.RoleEntity;
+import com.projekat.poslovna.security.Role;
 
-public interface RoleService {
+public interface RoleService extends ICrud<Role> {
 
-	Role findById(int id);
-	
-	List<Role> findAll();
-	
-	Role save(Role role);
-	
-	Role update(Role role);
-	
-	void delete(Role role);
 }

@@ -1,21 +1,10 @@
 package com.projekat.poslovna.service;
 
-import java.util.List;
-
 import com.projekat.poslovna.entity.Article;
-import com.projekat.poslovna.entity.ArticleGroup;
 
-public interface ArticleService {
-	
-	Article findById(int id);
-	
-	List<Article> findByArticleGroup(ArticleGroup articleGroup);
-	
-	List<Article> findAll();
-	
-	Article save(Article article);
-	
-	Article update(Article article);
-	
-	void delete(Article article);
+/**
+ * Created by milan.miljus on 2019-04-28 01:06.
+ */
+public interface ArticleService extends ICrud<Article> {
+
 }

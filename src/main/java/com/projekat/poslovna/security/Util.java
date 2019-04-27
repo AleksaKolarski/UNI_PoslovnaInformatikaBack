@@ -1,28 +1,33 @@
 package com.projekat.poslovna.security;
 
+import com.projekat.poslovna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.projekat.poslovna.entity.Employee;
-import com.projekat.poslovna.service.EmployeeService;
+import java.util.Optional;
 
 @Component
 public class Util {
 	
 	@Autowired
-	private EmployeeService employeeService;
+	private UserService userService;
 	
-	public Employee getCurrentUser() {
+	public User getCurrentUser() {
 		String userEmail;
 		Authentication currentUserAuth;
 		currentUserAuth = SecurityContextHolder.getContext().getAuthentication();
 		if(currentUserAuth != null) {
 			userEmail = currentUserAuth.getName();
 			if(userEmail != null) {
-				if(employeeService != null) {
-					return employeeService.findByEmail(userEmail);
+				if(userService != null) {
+					Optional<User> user = userService.findByEmail(userEmail);
+					if (user.isPresent()) {
+						return user.get();
+					} else {
+						return null;
+					}
 				}
 				System.out.println("USER SERVICE = NULL");
 			}

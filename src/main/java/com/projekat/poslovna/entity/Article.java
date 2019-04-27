@@ -1,73 +1,32 @@
 package com.projekat.poslovna.entity;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.List;
 
+/**
+ * Created by milan.miljus on 2019-04-27 16:09.
+ */
 @Entity
-public class Article {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	@Column(nullable=false, length=255)
-	private String name;
+@Data
+public class Article extends BaseEntity {
 
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	private Unit unit;
-	@ManyToOne(fetch=FetchType.LAZY, optional=false)
-	private ArticleGroup articleGroup;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="article")
-	private Set<ArticleCard> articleCards = new HashSet<>();
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="article")
-	private Set<DocumentItem> documentItems = new HashSet<>();
-	
-	public int getId() {
-		return id;
-	}
+    @NotBlank
+    @Column(unique = true)
+    private String name;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    @ManyToOne
+    private Unit unit;
 
-	public String getName() {
-		return name;
-	}
+    @ManyToOne(optional = false)
+    @JoinColumn
+    private ArticleGroup articleGroup;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @OneToMany(mappedBy = "article")
+    private List<ArticleCard> articleCards;
 
-	public Unit getUnit() {
-		return unit;
-	}
-
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-
-	@Override
-    public boolean equals(Object o) {
-
-        if (o == this) return true;
-        if (!(o instanceof Article)) {
-            return false;
-        }
-        Article article = (Article) o;
-        return id == article.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
+    @OneToMany(mappedBy = "article")
+    private List<DocumentItem> documentItems;
 }

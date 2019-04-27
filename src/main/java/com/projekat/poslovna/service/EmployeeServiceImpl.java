@@ -2,6 +2,7 @@ package com.projekat.poslovna.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeRepo employeeRepo;
 
 	@Override
-	public Employee findById(int id) {
+	public Optional<Employee> findById(UUID id) {
 		Optional<Employee> optional = employeeRepo.findById(id);
-		if(optional.isPresent() == false) {
-			return null;
-		}
-		return optional.get();
+		return optional;
 	}
 
 	@Override
-	public Employee findByEmail(String email) {
+	public Optional<Employee> findByEmail(String email) {
 		return employeeRepo.findByEmail(email);
 	}
 
@@ -46,13 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Employee update(Employee documentItem) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public void delete(Employee documentItem) {
 		// TODO Auto-generated method stub

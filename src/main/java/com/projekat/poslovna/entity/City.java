@@ -1,83 +1,29 @@
 package com.projekat.poslovna.entity;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * @author alowishusad
- *
+ * Created by milan.miljus on 2019-04-27 17:29.
  */
 @Entity
-public class City {
+@Data
+public class City extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int id;
-	@Column(nullable = false, length = 255)	
-	private String name;
+    @NotNull
+    @NotBlank
+    @Column(unique = true)
+    private String name;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="city")
-	private Set<BusinessPartner> businessPartners = new HashSet<>();
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="city")
-	private Set<Company> companies = new HashSet<>();
+    @OneToMany(mappedBy = "city")
+    private List<BusinessPartner> businessPartners;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Set<BusinessPartner> getBusinessPartners() {
-		return businessPartners;
-	}
-
-	public void setBusinessPartners(Set<BusinessPartner> businessPartners) {
-		this.businessPartners = businessPartners;
-	}
-
-	public Set<Company> getCompanies() {
-		return companies;
-	}
-
-	public void setCompanies(Set<Company> companies) {
-		this.companies = companies;
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-
-		if (o == this)
-			return true;
-		if (!(o instanceof City)) {
-			return false;
-		}
-		City city = (City) o;
-		return id == city.id &&
-				name.equals(city.getName());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, name);
-	}
-
+    @OneToMany(mappedBy = "city")
+    private List<Company> companies;
 }
