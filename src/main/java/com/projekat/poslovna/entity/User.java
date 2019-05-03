@@ -43,7 +43,7 @@ public class User extends BaseEntity implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	public boolean getIsAdmin() {
-		for(Role role: this.getRoles()) {
+		for(Role role: roles) {
 			if(role.getName().equals("ROLE_Admin")) {
 				return true;
 			}
@@ -53,12 +53,12 @@ public class User extends BaseEntity implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.getRoles();
+		return roles;
 	}
 
 	@Override
 	public String getUsername() {
-		return this.getEmail();
+		return email;
 	}
 
 	@Override
@@ -81,5 +81,8 @@ public class User extends BaseEntity implements UserDetails {
 		return true;
 	}
 
-
+	@Override
+	public String getPassword() {
+		return password;
+	}
 }
