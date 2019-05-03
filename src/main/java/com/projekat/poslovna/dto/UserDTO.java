@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.projekat.poslovna.entity.Company;
-import com.projekat.poslovna.entity.Employee;
-import com.projekat.poslovna.entity.Warehouse;
-import com.projekat.poslovna.security.User;
+
+import com.projekat.poslovna.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 

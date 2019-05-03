@@ -1,5 +1,6 @@
 package com.projekat.poslovna.security;
 
+import com.projekat.poslovna.entity.User;
 import com.projekat.poslovna.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

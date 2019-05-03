@@ -31,6 +31,6 @@ public class Warehouse extends BaseEntity {
     private List<DocumentOutbound> outboundDocuments;
 
     @ManyToMany
-    private List<Employee> employees;
+    private List<User> employees;
 
 }
