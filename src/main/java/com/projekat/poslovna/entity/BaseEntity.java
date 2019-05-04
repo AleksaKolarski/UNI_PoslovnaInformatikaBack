@@ -22,11 +22,9 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @NotNull
     @CreationTimestamp
     private Timestamp createdTime;
 
-    @NotNull
     @UpdateTimestamp
     private Timestamp updatedTime;
 

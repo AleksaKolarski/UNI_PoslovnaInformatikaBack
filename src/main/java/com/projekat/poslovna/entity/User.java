@@ -32,7 +32,7 @@ public class User extends BaseEntity implements UserDetails {
 	@NotBlank
 	private String password;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
 	@ManyToMany(mappedBy = "employees")

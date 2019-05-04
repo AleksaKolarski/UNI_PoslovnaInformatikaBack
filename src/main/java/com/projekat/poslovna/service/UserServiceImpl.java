@@ -15,17 +15,17 @@ import com.projekat.poslovna.entity.Company;
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	private UserRepo user;
+	private UserRepo userRepo;
 
 	@Override
 	public Optional<User> findById(UUID id) {
-		Optional<User> optional = user.findById(id);
+		Optional<User> optional = userRepo.findById(id);
 		return optional;
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		return user.findByEmail(email);
+		return userRepo.findByEmail(email);
 	}
 
 	@Override
@@ -36,13 +36,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> findAll() {
-		return user.findAll();
+		return userRepo.findAll();
 	}
 
 	@Override
-	public User save(User documentItem) {
-		// TODO Auto-generated method stub
-		return null;
+	public User save(User user) {
+		return userRepo.save(user);
 	}
 	@Override
 	public void delete(User documentItem) {
