@@ -1,52 +1,31 @@
 package com.projekat.poslovna.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
+import com.projekat.poslovna.entity.Company;
 import com.projekat.poslovna.entity.User;
 import com.projekat.poslovna.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.projekat.poslovna.service.base.CrudImpl;
 import org.springframework.stereotype.Service;
 
-import com.projekat.poslovna.entity.Company;
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
-	
-	@Autowired
-	private UserRepo userRepo;
+public class UserServiceImpl extends CrudImpl<User> implements UserService {
 
-	@Override
-	public Optional<User> findById(UUID id) {
-		Optional<User> optional = userRepo.findById(id);
-		return optional;
+	private final UserRepo repo;
+
+	public UserServiceImpl(UserRepo repo) {
+		super(repo);
+		this.repo = repo;
 	}
 
 	@Override
 	public Optional<User> findByEmail(String email) {
-		return userRepo.findByEmail(email);
+		throw new RuntimeException("not implemented");
 	}
 
 	@Override
 	public List<User> findByCompany(Company company) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("not implemented");
 	}
-
-	@Override
-	public List<User> findAll() {
-		return userRepo.findAll();
-	}
-
-	@Override
-	public User save(User user) {
-		return userRepo.save(user);
-	}
-	@Override
-	public void delete(User documentItem) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

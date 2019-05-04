@@ -1,48 +1,25 @@
 package com.projekat.poslovna.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.projekat.poslovna.entity.Role;
 import com.projekat.poslovna.repository.RoleRepo;
+import com.projekat.poslovna.service.base.CrudImpl;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
-public class RoleServiceImpl implements RoleService {
-	
-	@Autowired
-	private RoleRepo roleRepository;
+public class RoleServiceImpl extends CrudImpl<Role> implements RoleService {
 
-	@Override
-	public Role save(Role entity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	private final RoleRepo repo;
 
-	@Override
-	public void delete(Role entity) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Optional<Role> findById(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Role> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public RoleServiceImpl(RoleRepo repo) {
+		super(repo);
+		this.repo = repo;
 	}
 
 	@Override
 	public Optional<Role> findByName(String name) {
-		return roleRepository.findByName(name);
+		return repo.findByName(name);
 	}
 
 }

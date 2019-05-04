@@ -1,4 +1,4 @@
-package com.projekat.poslovna.service;
+package com.projekat.poslovna.service.base;
 
 import java.util.List;
 import java.util.Optional;

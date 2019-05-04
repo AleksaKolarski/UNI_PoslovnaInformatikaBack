@@ -1,15 +1,13 @@
 package com.projekat.poslovna.repository;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.projekat.poslovna.entity.Role;
+import com.projekat.poslovna.repository.base.CustomSoftDeleteRepo;
 import org.springframework.stereotype.Repository;
 
-import com.projekat.poslovna.entity.Role;
+import java.util.Optional;
 
 @Repository
-public interface RoleRepo extends JpaRepository<Role, UUID> {
+public interface RoleRepo extends CustomSoftDeleteRepo<Role> {
 
 	Optional<Role> findByName(String name);
 	

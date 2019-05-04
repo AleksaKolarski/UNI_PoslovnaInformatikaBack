@@ -1,4 +1,4 @@
-package com.projekat.poslovna.service;
+package com.projekat.poslovna.service.base;
 
 /**
  * Created by milan.miljus on 2019-04-28 01:04.
