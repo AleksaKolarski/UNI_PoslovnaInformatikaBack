@@ -1,6 +1,9 @@
 package com.projekat.poslovna.entity;
 
+import com.projekat.poslovna.entity.enums.DocumentType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -10,17 +13,19 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArticleCardAnalytics extends BaseEntity {
 
     private DocumentType direction;
     private long price;
     private int quantity;
-    private long value;
-
-    @ManyToOne(optional = false)
-    private Article article;
 
     @ManyToOne
     private ArticleCard articleCard;
+
+    public long getValue() {
+        return price * quantity;
+    }
 
 }

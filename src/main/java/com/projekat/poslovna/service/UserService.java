@@ -1,12 +1,24 @@
 package com.projekat.poslovna.service;
 
 import com.projekat.poslovna.entity.User;
-import com.projekat.poslovna.service.base.ICrud;
+import com.projekat.poslovna.repository.UserRepo;
+import com.projekat.poslovna.service.base.CrudImpl;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-public interface UserService extends ICrud<User> {
+@Service
+public class UserService extends CrudImpl<User> {
 
-	Optional<User> findByEmail(String email);
+	private final UserRepo repo;
+
+	public UserService(UserRepo repo) {
+		super(repo);
+		this.repo = repo;
+	}
+
+	public Optional<User> findByEmail(String email) {
+		throw new RuntimeException("not implemented");
+	}
 
 }

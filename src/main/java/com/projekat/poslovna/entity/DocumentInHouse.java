@@ -16,4 +16,5 @@ public class DocumentInHouse extends Document {
     @ManyToOne
     @NotNull
     private Warehouse targetWarehouse;
+
 }

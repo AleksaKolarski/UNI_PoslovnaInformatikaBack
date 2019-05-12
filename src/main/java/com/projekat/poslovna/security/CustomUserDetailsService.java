@@ -51,7 +51,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         	return false;
         }
         user.setPassword(passwordEncoder.encode(newPassword));
-        user = userService.save(user);
+        user = userService.create(user);
         if(user == null) {
         	return false;
         }

@@ -1,6 +1,7 @@
 package com.projekat.poslovna.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@NoArgsConstructor
 public class BusinessPartner extends BaseEntity {
 
     @NotNull
@@ -35,4 +37,11 @@ public class BusinessPartner extends BaseEntity {
 
     @OneToMany(mappedBy = "businessPartner")
     private List<DocumentOutbound> documents;
+
+    public BusinessPartner(String name, String PIB, String address, City city) {
+        this.name = name;
+        this.PIB = PIB;
+        this.address = address;
+        this.city = city;
+    }
 }

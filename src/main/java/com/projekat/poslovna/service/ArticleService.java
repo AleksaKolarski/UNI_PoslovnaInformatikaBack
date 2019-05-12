@@ -1,11 +1,18 @@
 package com.projekat.poslovna.service;
 
 import com.projekat.poslovna.entity.Article;
-import com.projekat.poslovna.service.base.ICrud;
+import com.projekat.poslovna.repository.ArticleRepo;
+import com.projekat.poslovna.service.base.CrudImpl;
+import org.springframework.stereotype.Service;
 
 /**
- * Created by milan.miljus on 2019-04-28 01:06.
+ * Created by milan.miljus on 2019-05-04 20:28.
  */
-public interface ArticleService extends ICrud<Article> {
+@Service
+public class ArticleService extends CrudImpl<Article> {
+
+    public ArticleService(ArticleRepo repo) {
+        super(repo);
+    }
 
 }

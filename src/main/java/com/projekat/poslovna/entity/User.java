@@ -35,7 +35,7 @@ public class User extends BaseEntity implements UserDetails {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 
-	@ManyToMany(mappedBy = "employees")
+	@ManyToMany(mappedBy = "users")
 	private List<Warehouse> warehouses;
 
 	// Spring security

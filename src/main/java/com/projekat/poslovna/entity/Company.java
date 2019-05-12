@@ -1,6 +1,8 @@
 package com.projekat.poslovna.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Company extends BaseEntity {
 
     @NotNull

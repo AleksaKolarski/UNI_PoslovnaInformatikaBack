@@ -1,6 +1,7 @@
 package com.projekat.poslovna.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@NoArgsConstructor
 public class Article extends BaseEntity {
 
     @NotBlank
@@ -29,4 +31,10 @@ public class Article extends BaseEntity {
 
     @OneToMany(mappedBy = "article")
     private List<DocumentItem> documentItems;
+
+    public Article(String name, Unit unit, ArticleGroup articleGroup) {
+        this.name = name;
+        this.unit = unit;
+        this.articleGroup = articleGroup;
+    }
 }

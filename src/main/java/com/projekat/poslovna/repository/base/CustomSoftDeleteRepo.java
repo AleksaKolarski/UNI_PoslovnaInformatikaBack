@@ -34,7 +34,8 @@ public interface CustomSoftDeleteRepo<T extends BaseEntity> extends JpaRepositor
     }
 
     @Override
-    @Query("update #{#entityName} e set e.deleted=false where e.id = ?1")
+    // TODO: 07 May 2019 00:00 milan.miljus uncomment for soft delete
+    //@Query("update #{#entityName} e set e.deleted=false where e.id = ?1")
     @Transactional
     @Modifying
     void deleteById(UUID id);

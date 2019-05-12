@@ -1,21 +1,21 @@
 package com.projekat.poslovna.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.projekat.poslovna.entity.enums.DocumentStatus;
+import com.projekat.poslovna.entity.enums.DocumentType;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by milan.miljus on 2019-04-27 19:34.
  */
-@MappedSuperclass
-@Getter
-@Setter
+@Entity
+@Data
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Document extends BaseEntity {
 
     private DocumentType type;
@@ -30,8 +30,8 @@ public abstract class Document extends BaseEntity {
     @ManyToOne(optional=false)
     private FiscalYear fiscalYear;
 
-    // TODO ova vezå je nejasna
-    @OneToMany
+    @NotEmpty
+    @OneToMany(mappedBy = "document", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<DocumentItem> documentItems;
 
 }

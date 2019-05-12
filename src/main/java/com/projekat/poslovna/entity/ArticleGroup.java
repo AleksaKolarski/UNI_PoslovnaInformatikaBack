@@ -1,10 +1,10 @@
 package com.projekat.poslovna.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -14,6 +14,7 @@ import java.util.List;
  */
 @Entity
 @Data
+@NoArgsConstructor
 public class ArticleGroup extends BaseEntity {
 
     @NotBlank
@@ -22,4 +23,8 @@ public class ArticleGroup extends BaseEntity {
 
     @OneToMany(mappedBy = "articleGroup")
     private List<Article> articles;
+
+    public ArticleGroup(String name) {
+        this.name = name;
+    }
 }

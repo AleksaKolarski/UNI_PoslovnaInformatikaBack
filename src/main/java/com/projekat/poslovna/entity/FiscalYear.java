@@ -1,6 +1,8 @@
 package com.projekat.poslovna.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -11,23 +13,26 @@ import java.util.List;
  */
 @Entity
 @Data
+@NoArgsConstructor
 public class FiscalYear extends BaseEntity {
 
-    @Column
     private int year;
 
     private boolean concluded;
 
+    @CreationTimestamp
     private Timestamp startedOn;
 
     private Timestamp endedOn;
 
     @OneToMany(mappedBy = "fiscalYear")
-    private List<DocumentInHouse> inHouseDocuments;
-
-    @OneToMany(mappedBy = "fiscalYear")
-    private List<DocumentOutbound> outBoundDocuments;
+    private List<Document> documents;
 
     @OneToMany(mappedBy = "fiscalYear")
     private List<ArticleCard> articleCards;
+
+    public FiscalYear(int year, boolean concluded) {
+        this.year = year;
+        this.concluded = concluded;
+    }
 }

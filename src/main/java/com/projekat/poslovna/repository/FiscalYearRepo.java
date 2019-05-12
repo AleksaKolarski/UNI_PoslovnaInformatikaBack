@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FiscalYearRepo extends CustomSoftDeleteRepo<FiscalYear> {
+
+    FiscalYear findByConcludedEqualsFalse();
 }

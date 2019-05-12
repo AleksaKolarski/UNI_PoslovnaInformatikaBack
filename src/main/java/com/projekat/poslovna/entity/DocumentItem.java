@@ -16,16 +16,15 @@ public class DocumentItem extends BaseEntity {
     @Size(min = 1)
     private int quantity;
 
-    private int price;
-
-    private int value;
+    private long price;
 
     @ManyToOne
     private Article article;
 
-//    nema vezu ka dokumentu, vec dobija po tabelu za svakog naslednika Document-a
-//    create table document_in_house (id binary(255) not null, created_ti........
-//    create table document_in_house_document_items (document_in_house_id......
-//    create table document_outbound (id binary(255) not null, created_ti....
-//    create table document_outbound_document_items (document_outbound_id..
+    @ManyToOne
+    private Document document;
+
+    public long getValue() {
+        return quantity * price;
+    }
 }

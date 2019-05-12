@@ -1,10 +1,17 @@
 package com.projekat.poslovna.service;
 
-import com.projekat.poslovna.entity.ArticleCard;
-import com.projekat.poslovna.service.base.ICrud;
+import com.projekat.poslovna.entity.Article;
+import com.projekat.poslovna.repository.ArticleCardRepo;
+import com.projekat.poslovna.service.base.CrudImpl;
+import org.springframework.stereotype.Service;
 
 /**
- * Created by milan.miljus on 2019-05-04 20:55.
+ * Created by milan.miljus on 2019-05-04 20:56.
  */
-public interface ArticleCardService extends ICrud<ArticleCard> {
+@Service
+public class ArticleCardService extends CrudImpl<Article> {
+
+    public ArticleCardService(ArticleCardRepo repo) {
+        super(repo);
+    }
 }

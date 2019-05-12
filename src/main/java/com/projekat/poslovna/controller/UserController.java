@@ -3,8 +3,8 @@ package com.projekat.poslovna.controller;
 import com.projekat.poslovna.entity.Role;
 import com.projekat.poslovna.entity.User;
 import com.projekat.poslovna.security.Util;
-import com.projekat.poslovna.service.RoleServiceImpl;
-import com.projekat.poslovna.service.UserServiceImpl;
+import com.projekat.poslovna.service.RoleService;
+import com.projekat.poslovna.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +29,10 @@ public class UserController {
 	private Util util;
 	
 	@Autowired
-	private UserServiceImpl userService;
+	private UserService userService;
 	
 	@Autowired
-	private RoleServiceImpl roleService;
+	private RoleService roleService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -93,7 +93,7 @@ public class UserController {
 		
 		user.setRoles(roles);
 		
-		user = userService.save(user);
+		user = userService.create(user);
 		
 		if(user == null) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
