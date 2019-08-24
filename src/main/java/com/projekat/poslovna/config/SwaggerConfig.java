@@ -32,7 +32,6 @@ public class SwaggerConfig implements WebMvcConfigurer {
         return new ApiInfoBuilder()
                 .title("Poslovna Projekat")
                 .description("REST Api for Poslovna")
-                .version("0.0.1")
                 .build();
     }
 

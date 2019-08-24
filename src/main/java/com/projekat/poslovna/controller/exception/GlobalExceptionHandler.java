@@ -1,6 +1,7 @@
 package com.projekat.poslovna.controller.exception;
 
 import com.projekat.poslovna.entity.exception.DocumentNotValidException;
+import com.projekat.poslovna.service.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
@@ -37,9 +38,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String UNEXPECTED_EXCEPTION_KEY = "unexpected.exception";
 
+    @ExceptionHandler(NotFoundException.class)
+    private ResponseEntity<Object> handleNotFound(NotFoundException ex) {
+        return buildResponseEntity(new ExceptionResponse(ex.getMessage(), NOT_FOUND));
+    }
+
     @ExceptionHandler(DocumentNotValidException.class)
-    private ResponseEntity<Object> handleBadRequest(CustomException ex) {
+    private ResponseEntity<Object> handleBadRequest(DocumentNotValidException ex) {
         return buildResponseEntity(new ExceptionResponse(ex.getMessage(), BAD_REQUEST));
+    }
+
+    @ExceptionHandler(CustomException.class)
+    private ResponseEntity<Object> handleUnknownCustomException(CustomException ex) {
+        return buildResponseEntity(new ExceptionResponse(ex.getMessage(), INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(Exception.class)
+    private ResponseEntity<Object> handleUnknownException(Exception ex) {
+        return buildResponseEntity(new ExceptionResponse(ex.getMessage(), INTERNAL_SERVER_ERROR));
     }
 
     @Override
