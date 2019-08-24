@@ -10,6 +10,8 @@ import lombok.Getter;
 @Getter
 public class ArticleDTO {
 
+    private int id;
+
     private String name;
 
     private UnitEnum unit;
@@ -17,6 +19,7 @@ public class ArticleDTO {
     private String articleGroupName;
 
     public ArticleDTO(Article article) {
+        this.id = article.getId();
         this.name = article.getName();
         this.unit = article.getUnit();
         this.articleGroupName = article.getArticleGroup().getName();
