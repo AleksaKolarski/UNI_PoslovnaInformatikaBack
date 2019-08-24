@@ -1,6 +1,8 @@
 package com.projekat.poslovna.controller;
 
+import com.projekat.poslovna.controller.value.ArticleCardDTO;
 import com.projekat.poslovna.controller.value.WarehouseDTO;
+import com.projekat.poslovna.entity.ArticleCard;
 import com.projekat.poslovna.entity.Warehouse;
 import com.projekat.poslovna.service.WarehouseService;
 import lombok.AllArgsConstructor;
@@ -32,6 +34,13 @@ public class WarehouseController {
     public ResponseEntity<WarehouseDTO> getWarehouseById(@PathVariable int warehouseId) {
         final Warehouse warehouse = warehouseService.getById(warehouseId);
         return new ResponseEntity<>(new WarehouseDTO(warehouse), HttpStatus.OK);
+    }
+
+    @GetMapping("/{warehouseId}/article-cards")
+    public ResponseEntity<List<ArticleCardDTO>> getArticleCardsForWarehouse(@PathVariable int warehouseId) {
+        final List<ArticleCard> articleCards = warehouseService.getArticleCardsForWarehouse(warehouseId);
+        final List<ArticleCardDTO> articleCardDTOs = articleCards.stream().map(ArticleCardDTO::new).collect(Collectors.toList());
+        return new ResponseEntity<>(articleCardDTOs, HttpStatus.OK);
     }
 
 }

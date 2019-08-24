@@ -1,5 +1,6 @@
 package com.projekat.poslovna.service;
 
+import com.projekat.poslovna.entity.ArticleCard;
 import com.projekat.poslovna.entity.Warehouse;
 import com.projekat.poslovna.repository.WarehouseRepository;
 import com.projekat.poslovna.service.exception.NotFoundException;
@@ -8,9 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created by milan.miljus on 8/24/19 2:17 PM.
- */
 @Service
 @AllArgsConstructor
 public class WarehouseService {
@@ -23,6 +21,12 @@ public class WarehouseService {
 
     public List<Warehouse> getAll() {
         return warehouseRepository.findAll();
+    }
+
+    public List<ArticleCard> getArticleCardsForWarehouse(int id) {
+        final Warehouse warehouse = this.getById(id);
+        final List<ArticleCard> articleCards = warehouse.getArticleCards();
+        return articleCards;
     }
 
 }
