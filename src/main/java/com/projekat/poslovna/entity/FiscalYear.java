@@ -1,10 +1,12 @@
 package com.projekat.poslovna.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -12,15 +14,16 @@ import java.util.List;
  * Created by milan.miljus on 2019-04-27 19:25.
  */
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class FiscalYear extends BaseEntity {
 
     private int year;
 
+    @Column(columnDefinition = "BIT default 0")
     private boolean concluded;
 
-    @CreationTimestamp
     private Timestamp startedOn;
 
     private Timestamp endedOn;

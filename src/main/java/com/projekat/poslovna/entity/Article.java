@@ -1,28 +1,34 @@
 package com.projekat.poslovna.entity;
 
-import lombok.Data;
+import com.projekat.poslovna.entity.enums.UnitEnum;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
  * Created by milan.miljus on 2019-04-27 16:09.
  */
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Article extends BaseEntity {
 
+    @NotNull
     @NotBlank
-    @Column(unique = true)
     private String name;
 
-    @ManyToOne
-    private Unit unit;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private UnitEnum unit;
 
-    @ManyToOne(optional = false)
+    @NotNull
+    @ManyToOne
     @JoinColumn
     private ArticleGroup articleGroup;
 
@@ -32,9 +38,4 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article")
     private List<DocumentItem> documentItems;
 
-    public Article(String name, Unit unit, ArticleGroup articleGroup) {
-        this.name = name;
-        this.unit = unit;
-        this.articleGroup = articleGroup;
-    }
 }
