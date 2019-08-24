@@ -1,21 +1,19 @@
 package com.projekat.poslovna.controller;
 
-import com.projekat.poslovna.controller.value.ArticleCardDTO;
 import com.projekat.poslovna.controller.value.WarehouseDTO;
-import com.projekat.poslovna.entity.ArticleCard;
 import com.projekat.poslovna.entity.Warehouse;
 import com.projekat.poslovna.service.WarehouseService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by milan.miljus on 8/24/19 2:16 PM.
- */
 @RestController
 @RequestMapping("/warehouses")
 @AllArgsConstructor
@@ -34,13 +32,6 @@ public class WarehouseController {
     public ResponseEntity<WarehouseDTO> getWarehouseById(@PathVariable int warehouseId) {
         final Warehouse warehouse = warehouseService.getById(warehouseId);
         return new ResponseEntity<>(new WarehouseDTO(warehouse), HttpStatus.OK);
-    }
-
-    @GetMapping("/{warehouseId}/article-cards")
-    public ResponseEntity<List<ArticleCardDTO>> getArticleCardsForWarehouse(@PathVariable int warehouseId) {
-        final List<ArticleCard> articleCards = warehouseService.getArticleCardsForWarehouse(warehouseId);
-        final List<ArticleCardDTO> articleCardDTOs = articleCards.stream().map(ArticleCardDTO::new).collect(Collectors.toList());
-        return new ResponseEntity<>(articleCardDTOs, HttpStatus.OK);
     }
 
 }

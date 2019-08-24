@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -30,7 +31,8 @@ public class Document extends BaseEntity {
     @ManyToOne
     private Warehouse sourceWarehouse;
 
-    @ManyToOne(optional=false)
+    @NotNull
+    @ManyToOne
     private FiscalYear fiscalYear;
 
     @NotEmpty

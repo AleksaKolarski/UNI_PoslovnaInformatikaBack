@@ -1,6 +1,5 @@
 package com.projekat.poslovna.service;
 
-import com.projekat.poslovna.entity.ArticleCard;
 import com.projekat.poslovna.entity.Warehouse;
 import com.projekat.poslovna.repository.WarehouseRepository;
 import com.projekat.poslovna.service.exception.NotFoundException;
@@ -21,12 +20,6 @@ public class WarehouseService {
 
     public List<Warehouse> getAll() {
         return warehouseRepository.findAll();
-    }
-
-    public List<ArticleCard> getArticleCardsForWarehouse(int id) {
-        final Warehouse warehouse = this.getById(id);
-        final List<ArticleCard> articleCards = warehouse.getArticleCards();
-        return articleCards;
     }
 
 }

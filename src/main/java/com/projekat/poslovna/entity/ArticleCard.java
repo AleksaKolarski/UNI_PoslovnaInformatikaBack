@@ -54,4 +54,8 @@ public class ArticleCard extends BaseEntity {
     public long getSumValue(){
         return -420; // TODO: 09 May 2019 15:30 milan.miljus nisam siguran sta je ovo
     }
+
+    public ArticleGroup getArticleGroup() {
+        return this.article.getArticleGroup();
+    }
 }

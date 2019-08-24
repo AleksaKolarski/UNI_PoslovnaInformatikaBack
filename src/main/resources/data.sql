@@ -1,4 +1,6 @@
-INSERT INTO warehouse (name, address) VALUES ('Warehouse0', 'Narodnog fronta');
+INSERT INTO warehouse (name, address) VALUES ('Glavni magacin', 'Narodnog fronta 59');
+INSERT INTO warehouse (name, address) VALUES ('Mali magacin', 'Novosadkog sajma');
+INSERT INTO warehouse (name, address) VALUES ('Veliki magacin', 'Spens');
 
 INSERT INTO fiscal_year (year, started_on) VALUES (2019, '2019-01-01');
 
@@ -6,6 +8,11 @@ INSERT INTO article_group (id, name) VALUES (1, 'cpu');
 INSERT INTO article_group (id, name) VALUES (2, 'gpu');
 INSERT INTO article_group (id, name) VALUES (3, 'motherboard');
 INSERT INTO article_group (id, name) VALUES (4, 'cables');
+
+INSERT INTO business_partner (id, name, pib, address, city) VALUES (1, 'Global Computers DOO', '123456789', 'Adresa 12 Kaplara', 'Novi Sad');
+INSERT INTO business_partner (id, name, pib, address, city) VALUES (2, 'Gigatron', '234567890', 'Novog Stadiona 69', 'Novi Sad');
+INSERT INTO business_partner (id, name, pib, address, city) VALUES (3, 'Win Win', '345678901', 'Novog Boga 21', 'Beograd');
+INSERT INTO business_partner (id, name, pib, address, city) VALUES (4, 'Srpski kompjuter', '3456789012', '12 Kaplara', 'Beograd');
 
 INSERT INTO article (id, name, unit, article_group_id) VALUES (1, 'Intel i7 8th gen', 'PCS', 1);
 INSERT INTO article (id, name, unit, article_group_id) VALUES (2, 'GeForce 1080', 'PCS', 2);
