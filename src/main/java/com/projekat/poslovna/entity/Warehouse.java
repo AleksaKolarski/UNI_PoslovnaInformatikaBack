@@ -3,7 +3,6 @@ package com.projekat.poslovna.entity;
 import lombok.Data;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -29,8 +28,5 @@ public class Warehouse extends BaseEntity {
 
     @OneToMany(mappedBy = "targetWarehouse")
     private List<DocumentInHouse> documentsInHouse;
-
-    @ManyToMany
-    private List<User> users;
 
 }
