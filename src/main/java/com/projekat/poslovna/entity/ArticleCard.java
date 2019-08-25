@@ -18,10 +18,10 @@ import java.util.List;
 @Setter
 public class ArticleCard extends BaseEntity {
 
-    @Column(columnDefinition = "int default 0")
-    private int quantity;
-    @Column(columnDefinition = "bigint default null")
-    private Long price; // srednja kupovna
+//    @Column(columnDefinition = "int default 0")
+//    private int quantity;
+//    @Column(columnDefinition = "bigint default null")
+//    private Long price; // srednja kupovna
 
     @Column(columnDefinition = "int default 0")
     private int startStateQuantity;
@@ -51,11 +51,17 @@ public class ArticleCard extends BaseEntity {
     @ManyToOne
     private FiscalYear fiscalYear;
 
-    public long getSumValue(){
-        return -420; // TODO: 09 May 2019 15:30 milan.miljus nisam siguran sta je ovo
-    }
-
     public ArticleGroup getArticleGroup() {
         return this.article.getArticleGroup();
     }
+
+    public int getQuantity() {
+        return this.startStateQuantity + this.inQuantity - this.outQuantity;
+    }
+
+    public Long getPrice() {
+        long price = this.startStatePrice + this.inPrice - this.outPrice;
+        return price == 0 ? null : price;
+    }
+
 }

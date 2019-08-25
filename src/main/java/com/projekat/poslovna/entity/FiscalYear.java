@@ -1,5 +1,6 @@
 package com.projekat.poslovna.entity;
 
+import com.projekat.poslovna.utils.Utils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,4 +39,10 @@ public class FiscalYear extends BaseEntity {
         this.year = year;
         this.concluded = concluded;
     }
+
+    public void conclude() {
+        this.endedOn = Utils.getCurrentTimestamp();
+        this.concluded = true;
+    }
+
 }

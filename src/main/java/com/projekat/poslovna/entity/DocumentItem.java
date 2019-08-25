@@ -1,21 +1,24 @@
 package com.projekat.poslovna.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Positive;
 
 /**
  * Created by milan.miljus on 2019-04-27 19:21.
  */
 @Entity
-@Data
+@Getter
+@Setter
 public class DocumentItem extends BaseEntity {
 
-    @Size(min = 1)
+    @Positive
     private int quantity;
 
+    @Positive
     private long price;
 
     @ManyToOne
@@ -26,5 +29,9 @@ public class DocumentItem extends BaseEntity {
 
     public long getValue() {
         return quantity * price;
+    }
+
+    public int  getArticleId() {
+        return article.getId();
     }
 }

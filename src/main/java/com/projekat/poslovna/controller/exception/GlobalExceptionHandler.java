@@ -36,8 +36,6 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String UNEXPECTED_EXCEPTION_KEY = "unexpected.exception";
-
     @ExceptionHandler(NotFoundException.class)
     private ResponseEntity<Object> handleNotFound(NotFoundException ex) {
         return buildResponseEntity(new ExceptionResponse(ex.getMessage(), NOT_FOUND));
@@ -50,11 +48,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     private ResponseEntity<Object> handleUnknownCustomException(CustomException ex) {
+        ex.printStackTrace();
         return buildResponseEntity(new ExceptionResponse(ex.getMessage(), INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(Exception.class)
     private ResponseEntity<Object> handleUnknownException(Exception ex) {
+        ex.printStackTrace();
         return buildResponseEntity(new ExceptionResponse(ex.getMessage(), INTERNAL_SERVER_ERROR));
     }
 

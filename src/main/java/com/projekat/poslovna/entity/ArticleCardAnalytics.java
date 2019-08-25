@@ -1,9 +1,9 @@
 package com.projekat.poslovna.entity;
 
 import com.projekat.poslovna.entity.enums.DirectionEnum;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.projekat.poslovna.entity.enums.DocumentType;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -13,9 +13,8 @@ import javax.persistence.ManyToOne;
  * Analatika magacinske kartice
  */
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class ArticleCardAnalytics extends BaseEntity {
 
     private DirectionEnum direction;
@@ -27,6 +26,10 @@ public class ArticleCardAnalytics extends BaseEntity {
 
     public long getValue() {
         return price * quantity;
+    }
+
+    public void setDirection(DocumentType documentType) {
+        this.direction = DirectionEnum.from(documentType);
     }
 
 }

@@ -1,15 +1,13 @@
 package com.projekat.poslovna.entity;
 
 import com.projekat.poslovna.entity.enums.DocumentStatus;
+import com.projekat.poslovna.entity.enums.DocumentType;
 import com.projekat.poslovna.entity.exception.DocumentNotValidException;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -26,6 +24,8 @@ public class Document extends BaseEntity {
     @CreationTimestamp
     private Timestamp formedOn;
     private Timestamp bookedOn;
+
+    @Enumerated(EnumType.STRING)
     private DocumentStatus status = DocumentStatus.FORMED;
 
     @ManyToOne
@@ -36,7 +36,7 @@ public class Document extends BaseEntity {
     private FiscalYear fiscalYear;
 
     @NotEmpty
-    @OneToMany(mappedBy = "document")
+    @OneToMany(mappedBy = "document", cascade = CascadeType.PERSIST)
     private List<DocumentItem> documentItems;
 
     @ManyToOne
@@ -46,21 +46,28 @@ public class Document extends BaseEntity {
     private BusinessPartner businessPartner;
 
     @PrePersist
-    private void checkValidity() {
-        int nullsNumber = 0;
-        if (sourceWarehouse == null) {
-            nullsNumber += 1;
-        }
-        if (targetWarehouse == null) {
-            nullsNumber += 1;
-        }
-        if (businessPartner == null) {
-            nullsNumber += 1;
-        }
-        if (nullsNumber != 1) {
+    private void check() {
+        getDocumentType(
+                this.sourceWarehouse != null ? this.sourceWarehouse.getId() : null,
+                this.targetWarehouse != null ? this.targetWarehouse.getId() : null,
+                this.businessPartner != null ? this.businessPartner.getId() : null
+        );
+    }
+
+    public static DocumentType getDocumentType(Integer sourceWarehouse, Integer targetWarehouse, Integer businessPartner) {
+        if (!isNullOrZero(sourceWarehouse) && !isNullOrZero(targetWarehouse) && isNullOrZero(businessPartner)) {
+            return DocumentType.IN_HOUSE;
+        } else if (isNullOrZero(sourceWarehouse) && !isNullOrZero(targetWarehouse) && !isNullOrZero(businessPartner)) {
+            return DocumentType.IMPORT;
+        } else if (!isNullOrZero(sourceWarehouse) && isNullOrZero(targetWarehouse) && !isNullOrZero(businessPartner)) {
+            return DocumentType.EXPORT;
+        } else {
             throw new DocumentNotValidException();
         }
     }
 
+    private static boolean isNullOrZero(Integer integer) {
+        return integer == null || integer == 0;
+    }
 
 }

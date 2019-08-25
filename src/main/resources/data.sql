@@ -21,9 +21,35 @@ INSERT INTO article (id, name, unit, article_group_id) VALUES (4, 'AMD Ryzen 5',
 INSERT INTO article (id, name, unit, article_group_id) VALUES (5, 'AMD Board', 'PCS', 3);
 INSERT INTO article (id, name, unit, article_group_id) VALUES (6, 'Ethernet UTP', 'm', 4);
 INSERT INTO article (id, name, unit, article_group_id) VALUES (7, 'Optical', 'm', 4);
+INSERT INTO article (id, name, unit, article_group_id) VALUES (8, 'Intel i5 8th gen', 'PCS', 1);
+INSERT INTO article (id, name, unit, article_group_id) VALUES (9, 'AMD Ryzen 3', 'PCS', 1);
 
 INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (1, 1, 1);
 INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (2, 1, 1);
 INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (3, 1, 1);
 INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (4, 1, 1);
 INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (5, 1, 1);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (6, 1, 1);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (7, 1, 1);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (8, 1, 1);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (9, 1, 1);
+
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (1, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (2, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (3, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (4, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (5, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (6, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (7, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (8, 1, 2);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (9, 1, 2);
+
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (1, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (2, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (3, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (4, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (5, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (6, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (7, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (8, 1, 3);
+INSERT INTO article_card (article_id, fiscal_year_id, warehouse_id) VALUES (9, 1, 3);

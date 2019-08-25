@@ -44,4 +44,6 @@ public class ArticleCardController {
         return new ResponseEntity<>(new ArticleCardDTO(articleCard), HttpStatus.OK);
     }
 
+
+
 }
