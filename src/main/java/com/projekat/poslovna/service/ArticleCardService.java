@@ -1,9 +1,7 @@
 package com.projekat.poslovna.service;
 
-import com.projekat.poslovna.entity.ArticleCard;
-import com.projekat.poslovna.entity.ArticleCardAnalytics;
-import com.projekat.poslovna.entity.ArticleGroup;
-import com.projekat.poslovna.entity.Warehouse;
+import com.projekat.poslovna.entity.*;
+import com.projekat.poslovna.entity.enums.DirectionEnum;
 import com.projekat.poslovna.entity.enums.DocumentType;
 import com.projekat.poslovna.repository.ArticleCardAnalyticsRepository;
 import com.projekat.poslovna.repository.ArticleCardRepository;
@@ -27,6 +25,7 @@ public class ArticleCardService {
     private final ArticleGroupService articleGroupService;
     private final ArticleCardRepository articleCardRepository;
     private final ArticleCardAnalyticsRepository articleCardAnalyticsRepository;
+    private final FiscalYearCurrent fiscalYearCurrent;
 
     @Transactional(rollbackFor = Throwable.class, readOnly = true)
     public List<ArticleCard> getAll() {
@@ -44,8 +43,8 @@ public class ArticleCardService {
 
     @Transactional(rollbackFor = Throwable.class, readOnly = true)
     public List<ArticleCard> getArticleCardsForWarehouse(int warehouseId) {
-        final Warehouse warehouse = warehouseService.getById(warehouseId);
-        final List<ArticleCard> articleCards = warehouse.getArticleCards();
+        final List<ArticleCard> articleCards =
+                articleCardRepository.getByWarehouseIdAndFiscalYearId(warehouseId, fiscalYearCurrent.get().getId());
         return articleCards;
     }
 
@@ -61,7 +60,10 @@ public class ArticleCardService {
 
     @Transactional(rollbackFor = Throwable.class, readOnly = true)
     public ArticleCard getByWarehouseIdAndArticleId(int warehouseId, int articleId) {
-        return articleCardRepository.getByWarehouseIdAndArticleId(warehouseId, articleId).orElseThrow(() -> new NotFoundException("article card"));
+        final int fiscalYearId = fiscalYearCurrent.get().getId();
+        return articleCardRepository
+                .getByWarehouseIdAndArticleIdAndFiscalYearId(warehouseId, articleId, fiscalYearId)
+                .orElseThrow(() -> new NotFoundException("article card"));
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -70,33 +72,54 @@ public class ArticleCardService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void updateArticleCard(int warehouseId, int articleId, int quantity, long price, DocumentType documentType) {
+    public void updateArticleCard(int warehouseId, int articleId, int quantity, Long price, DocumentType documentType) {
         final ArticleCard articleCard = getByWarehouseIdAndArticleId(warehouseId, articleId);
 
+        DirectionEnum direction = null;
         switch (documentType) {
             case IMPORT:
-                articleCard.setInPrice(articleCard.getInPrice() + quantity * price);
+                articleCard.setInValue(articleCard.getInValue() + quantity * price);
                 articleCard.setInQuantity(articleCard.getInQuantity() + quantity);
+                direction = DirectionEnum.IN;
                 break;
             case EXPORT:
                 if (articleCard.getQuantity() < quantity) {
-                    throw new NotEnoughArticlesException(articleCard.getArticle().getName(), articleCard.getInQuantity());
+                    throw new NotEnoughArticlesException(articleCard);
                 }
-                articleCard.setOutPrice(articleCard.getOutPrice() - quantity * price);
-                articleCard.setOutQuantity(articleCard.getOutQuantity() - quantity);
+                articleCard.setOutValue(articleCard.getOutValue() + quantity * price);
+                articleCard.setOutQuantity(articleCard.getOutQuantity() + quantity);
+                direction = DirectionEnum.OUT;
                 break;
+            case IN_HOUSE:
             default:
                 throw new RuntimeException("");
         }
 
-        createAnalyticsForTransaction(quantity, price, documentType, articleCard);
+        createAnalyticsForTransaction(quantity, price, documentType, direction, articleCard);
     }
 
-    private void createAnalyticsForTransaction(int quantity, long price, DocumentType documentType, ArticleCard articleCard) {
+    @Transactional(rollbackFor = Throwable.class)
+    public void updateArticleCardInHouse(int sourceWarehouseId, int targetWarehouseId, int articleId, int quantity) {
+        final ArticleCard sourceArticleCard = getByWarehouseIdAndArticleId(sourceWarehouseId, articleId);
+        final ArticleCard targetArticleCard = getByWarehouseIdAndArticleId(targetWarehouseId, articleId);
+
+        if (sourceArticleCard.getQuantity() < quantity) {
+            throw new NotEnoughArticlesException(sourceArticleCard);
+        }
+
+        sourceArticleCard.setOutQuantity(sourceArticleCard.getOutQuantity() + quantity);
+        targetArticleCard.setInQuantity(targetArticleCard.getInQuantity() + quantity);
+
+        createAnalyticsForTransaction(quantity, null, DocumentType.IN_HOUSE, DirectionEnum.OUT, sourceArticleCard);
+        createAnalyticsForTransaction(quantity, null, DocumentType.IN_HOUSE, DirectionEnum.IN, targetArticleCard);
+    }
+
+    private void createAnalyticsForTransaction(int quantity, Long price, DocumentType documentType, DirectionEnum direction, ArticleCard articleCard) {
         final ArticleCardAnalytics analytics = new ArticleCardAnalytics();
         analytics.setPrice(price);
         analytics.setQuantity(quantity);
-        analytics.setDirection(documentType);
+        analytics.setDirection(direction);
+        analytics.setDocumentType(documentType);
         analytics.setArticleCard(articleCard);
         articleCardAnalyticsRepository.save(analytics);
     }

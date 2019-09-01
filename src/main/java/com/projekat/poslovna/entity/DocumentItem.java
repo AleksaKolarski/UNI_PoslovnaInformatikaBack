@@ -5,25 +5,23 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
 
-/**
- * Created by milan.miljus on 2019-04-27 19:21.
- */
 @Entity
 @Getter
 @Setter
 public class DocumentItem extends BaseEntity {
 
-    @Positive
+//    @Positive
     private int quantity;
 
-    @Positive
-    private long price;
+//    @Positive
+    private Long price;
 
     @ManyToOne
     private Article article;
 
+    @NotNull
     @ManyToOne
     private Document document;
 

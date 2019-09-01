@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by milan.miljus on 8/25/19 4:12 PM.
  */
@@ -20,6 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class FiscalYearController {
 
     private final FiscalYearService fiscalYearService;
+
+    @GetMapping
+    public ResponseEntity<List<FiscalYearDTO>> getAll() {
+        final List<FiscalYear> fiscalYears = fiscalYearService.getAll();
+        final List<FiscalYearDTO> fiscalYearDTOS = fiscalYears.stream().map(FiscalYearDTO::new).collect(Collectors.toList());
+        return new ResponseEntity<>(fiscalYearDTOS, HttpStatus.OK);
+    }
 
     @GetMapping("/current")
     public ResponseEntity<FiscalYearDTO> getCurrent() {
@@ -32,5 +42,7 @@ public class FiscalYearController {
         fiscalYearService.conclude();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 
 }

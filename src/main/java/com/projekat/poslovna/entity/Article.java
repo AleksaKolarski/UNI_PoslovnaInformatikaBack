@@ -38,4 +38,9 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article")
     private List<DocumentItem> documentItems;
 
+    public Article(String name, UnitEnum unit, ArticleGroup articleGroup) {
+        this.name = name;
+        this.unit = unit;
+        this.articleGroup = articleGroup;
+    }
 }

@@ -29,4 +29,5 @@ public class ArticleGroupController {
         final List<ArticleGroupDTO> articleGroupDTOS = articleGroups.stream().map(ArticleGroupDTO::new).collect(Collectors.toList());
         return new ResponseEntity<>(articleGroupDTOS, HttpStatus.OK);
     }
+
 }

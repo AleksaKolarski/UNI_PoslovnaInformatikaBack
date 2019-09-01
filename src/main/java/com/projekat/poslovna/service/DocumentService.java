@@ -1,87 +1,68 @@
 package com.projekat.poslovna.service;
 
-import com.projekat.poslovna.controller.exception.CustomException;
-import com.projekat.poslovna.controller.value.DocumentCreateDTO;
-import com.projekat.poslovna.controller.value.DocumentItemCreateDTO;
-import com.projekat.poslovna.entity.*;
+import com.projekat.poslovna.entity.Document;
+import com.projekat.poslovna.entity.DocumentItem;
 import com.projekat.poslovna.entity.enums.DocumentType;
 import com.projekat.poslovna.repository.DocumentRepository;
-import lombok.AllArgsConstructor;
+import com.projekat.poslovna.service.exception.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by milan.miljus on 8/25/19 12:28 PM.
- */
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DocumentService {
 
-    private final WarehouseService warehouseService;
-    private final BusinessPartnerService businessPartnerService;
-    private final FiscalYearService fiscalYearService;
-    private final ArticleService articleService;
+    private final DocumentCreateService documentCreateService;
     private final DocumentRepository documentRepository;
-    private final ArticleCardService articleCardService;
 
-    @Transactional(rollbackFor = Throwable.class)
-    public int createDocument(DocumentCreateDTO documentDto) {
-        final DocumentType documentType = Document.getDocumentType(
-                documentDto.getSourceWarehouseId(),
-                documentDto.getTargetWarehouseId(),
-                documentDto.getBusinessPartnerId()
-        );
-
-        final Document document = createDocumentEntity(documentDto);
-
-        switch (documentType) {
-            case IMPORT:
-                final int targetWarehouseId = document.getTargetWarehouse().getId();
-                document.getDocumentItems().forEach(item -> {
-                    articleCardService.updateArticleCard(targetWarehouseId, item.getArticleId(), item.getQuantity(), item.getPrice(), documentType);
-                });
-                break;
-            case EXPORT:
-                final int sourceWarehouseId = document.getSourceWarehouse().getId();
-                document.getDocumentItems().forEach(item -> {
-                    articleCardService.updateArticleCard(sourceWarehouseId, item.getArticleId(), item.getQuantity(), item.getPrice(), documentType);
-                });
-                break;
-            case IN_HOUSE:
-                // TODO: milan.miljus 8/25/19 2:16 PM
-                throw new CustomException("");
-        }
-        return document.getId();
+    @Transactional(rollbackFor = Throwable.class, readOnly = true)
+    public List<Document> getAllForFiscalYear(int fiscalYearId) {
+        final List<Document> documents = documentRepository.getByFiscalYearId(fiscalYearId);
+        return documents;
     }
 
+    @Transactional(readOnly = true)
+    public List<DocumentItem> getDocumentItemsForDocumentId(int documentId) {
+        final Document document = this.getById(documentId);
+        return document.getDocumentItems();
+    }
 
-    private Document createDocumentEntity(DocumentCreateDTO documentDto) {
-        final Warehouse sourceWarehouse = documentDto.getSourceWarehouseId() != null ? warehouseService.getById(documentDto.getSourceWarehouseId()) : null;
-        final Warehouse targetWarehouse = documentDto.getTargetWarehouseId() != null ? warehouseService.getById(documentDto.getTargetWarehouseId()) : null;
-        final BusinessPartner businessPartner = documentDto.getBusinessPartnerId() != null ? businessPartnerService.getById(documentDto.getBusinessPartnerId()) : null;
+    @Transactional(rollbackFor = Throwable.class, readOnly = true)
+    public Document getById(int documentId) {
+        return documentRepository.findById(documentId).orElseThrow(() -> new NotFoundException("document"));
+    }
+
+    @Transactional(rollbackFor = Throwable.class, readOnly = false)
+    public int storn(int documentId) {
+        final Document sourceDocument = this.getById(documentId);
+        final DocumentType sourceDocumentType = sourceDocument.getDocumentType();
 
         final Document document = new Document();
-        document.setSourceWarehouse(sourceWarehouse);
-        document.setTargetWarehouse(targetWarehouse);
-        document.setBusinessPartner(businessPartner);
-        document.setFiscalYear(fiscalYearService.getCurrent());
-        document.setDocumentItems(getDocumentItems(documentDto.getDocumentItems()));
+        document.setDocumentType(DocumentType.STORNO);
+        document.setFiscalYear(sourceDocument.getFiscalYear());
+        document.setTargetWarehouse(sourceDocument.getTargetWarehouse());
+        document.setSourceWarehouse(sourceDocument.getSourceWarehouse());
+        document.setBusinessPartner(sourceDocument.getBusinessPartner());
+        document.setDocumentItems(flipDocumentItems(document, sourceDocument.getDocumentItems()));
         documentRepository.save(document);
-        return document;
+
+        final int stornDocumentId = documentCreateService.processDocument(document, sourceDocumentType);
+        return stornDocumentId;
     }
 
-    private List<DocumentItem> getDocumentItems(List<DocumentItemCreateDTO> itemDTOs) {
-        final List<DocumentItem> documentItems = itemDTOs.stream().map(itemDto -> {
-            final DocumentItem documentItem = new DocumentItem();
-            documentItem.setPrice(itemDto.getPrice());
-            documentItem.setQuantity(itemDto.getQuantity());
-            documentItem.setArticle(articleService.findById(itemDto.getArticleId()));
-            return documentItem;
+    public List<DocumentItem> flipDocumentItems(Document document, List<DocumentItem> documentItems) {
+        return documentItems.stream().map(documentItem -> {
+            final DocumentItem newDocumentItem = new DocumentItem();
+            newDocumentItem.setArticle(documentItem.getArticle());
+            newDocumentItem.setQuantity(-documentItem.getQuantity());
+            newDocumentItem.setPrice(documentItem.getPrice());
+            newDocumentItem.setDocument(document);
+            return newDocumentItem;
         }).collect(Collectors.toList());
-        return documentItems;
     }
-
 }

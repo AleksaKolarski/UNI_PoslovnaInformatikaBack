@@ -4,9 +4,14 @@ import com.projekat.poslovna.entity.ArticleCardAnalytics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by milan.miljus on 8/25/19 2:09 PM.
  */
 @Repository
 public interface ArticleCardAnalyticsRepository extends JpaRepository<ArticleCardAnalytics, Integer> {
+
+    List<ArticleCardAnalytics> findByArticleCardId(int articleCardId);
+
 }

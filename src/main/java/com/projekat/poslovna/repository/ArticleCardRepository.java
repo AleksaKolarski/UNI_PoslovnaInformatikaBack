@@ -4,6 +4,7 @@ import com.projekat.poslovna.entity.ArticleCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,8 +17,7 @@ public interface ArticleCardRepository extends JpaRepository<ArticleCard, Intege
 
     Optional<ArticleCard> getByWarehouseIdAndArticleIdAndFiscalYearId(int warehouseId, int articleId, int fiscalYearId);
 
-
-
+    List<ArticleCard> getByWarehouseIdAndFiscalYearId(int warehouseId, int fiscalYearId);
 }
 
 

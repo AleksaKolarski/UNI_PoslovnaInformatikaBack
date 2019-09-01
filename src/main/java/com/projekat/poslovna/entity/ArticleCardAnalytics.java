@@ -2,11 +2,16 @@ package com.projekat.poslovna.entity;
 
 import com.projekat.poslovna.entity.enums.DirectionEnum;
 import com.projekat.poslovna.entity.enums.DocumentType;
+import com.projekat.poslovna.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 
 /**
  * Created by milan.miljus on 2019-04-27 17:24.
@@ -17,19 +22,31 @@ import javax.persistence.ManyToOne;
 @Setter
 public class ArticleCardAnalytics extends BaseEntity {
 
+    @NotNull
+    private DocumentType documentType;
+
+    @NotNull
     private DirectionEnum direction;
-    private long price;
+
+//    @Positive
+    private Long price;
+
+//    @Positive
     private int quantity;
+
+    @NotNull
+    @CreationTimestamp
+    private Timestamp timestamp;
 
     @ManyToOne
     private ArticleCard articleCard;
 
-    public long getValue() {
-        return price * quantity;
+    public Long getValue() {
+        return price != null ? price * quantity : null;
     }
 
-    public void setDirection(DocumentType documentType) {
-        this.direction = DirectionEnum.from(documentType);
+    @PrePersist
+    private void setTimestamp() {
+        this.timestamp = Utils.getCurrentTimestamp();
     }
-
 }

@@ -26,17 +26,17 @@ public class ArticleCard extends BaseEntity {
     @Column(columnDefinition = "int default 0")
     private int startStateQuantity;
     @Column(columnDefinition = "bigint default 0")
-    private long startStatePrice;
+    private long startStateValue;
 
     @Column(columnDefinition = "int default 0")
     private int inQuantity;
     @Column(columnDefinition = "bigint default 0")
-    private long inPrice;
+    private long inValue;
 
     @Column(columnDefinition = "int default 0")
     private int outQuantity;
     @Column(columnDefinition = "bigint default 0")
-    private long outPrice;
+    private long outValue;
 
     @NotNull
     @ManyToOne(optional = false)
@@ -59,9 +59,15 @@ public class ArticleCard extends BaseEntity {
         return this.startStateQuantity + this.inQuantity - this.outQuantity;
     }
 
-    public Long getPrice() {
-        long price = this.startStatePrice + this.inPrice - this.outPrice;
-        return price == 0 ? null : price;
+    public Long getValue() {
+        return this.startStateValue + this.inValue - this.outValue;
     }
 
+    public Long getCalculatedPrice() {
+        try {
+            return getValue() / getQuantity();
+        } catch (ArithmeticException e) {
+            return 0L;
+        }
+    }
 }

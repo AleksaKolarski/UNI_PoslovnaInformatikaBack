@@ -1,6 +1,8 @@
 package com.projekat.poslovna.controller.exception;
 
 import com.projekat.poslovna.entity.exception.DocumentNotValidException;
+import com.projekat.poslovna.service.exception.CantTransferWithinSameWarehouseException;
+import com.projekat.poslovna.service.exception.NotEnoughArticlesException;
 import com.projekat.poslovna.service.exception.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -36,13 +38,24 @@ import static org.springframework.http.HttpStatus.*;
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler({
+            NotEnoughArticlesException.class,
+            CantTransferWithinSameWarehouseException.class,
+    })
+    private ResponseEntity<Object> handleConflict(CustomException ex) {
+        log.info(ex.getMessage());
+        return buildResponseEntity(new ExceptionResponse(ex.getMessage(), CONFLICT));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     private ResponseEntity<Object> handleNotFound(NotFoundException ex) {
+        log.info(ex.getMessage());
         return buildResponseEntity(new ExceptionResponse(ex.getMessage(), NOT_FOUND));
     }
 
     @ExceptionHandler(DocumentNotValidException.class)
     private ResponseEntity<Object> handleBadRequest(DocumentNotValidException ex) {
+        log.info(ex.getMessage());
         return buildResponseEntity(new ExceptionResponse(ex.getMessage(), BAD_REQUEST));
     }
 

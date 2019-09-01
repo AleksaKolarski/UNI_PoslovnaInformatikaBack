@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * Created by milan.miljus on 8/25/19 1:06 PM.
@@ -19,33 +19,35 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class FiscalYearService {
 
-    private FiscalYear currentFiscalYear;
-
     private final ArticleService articleService;
     private final ArticleCardService articleCardService;
     private final WarehouseService warehouseService;
     private final FiscalYearRepository fiscalYearRepository;
-
-    @PostConstruct
-    private void setCurrentFiscalYear() {
-        this.currentFiscalYear = fiscalYearRepository.getByConcludedFalse();
-    }
+    private final FiscalYearCurrent fiscalYearCurrent;
 
     public FiscalYear getCurrent() {
-        return this.currentFiscalYear;
+        return fiscalYearCurrent.get();
+    }
+
+    @Transactional(readOnly = true)
+    public List<FiscalYear> getAll() {
+        return fiscalYearRepository.findAll();
     }
 
     @Transactional(rollbackFor = Throwable.class)
     public void conclude() {
-        final FiscalYear oldFiscalYear = this.currentFiscalYear;
-        this.currentFiscalYear.conclude();
-        this.currentFiscalYear = createNewFiscalYear();
+        final FiscalYear oldFiscalYear = this.getCurrent();
+        oldFiscalYear.conclude();
+        fiscalYearRepository.save(oldFiscalYear);
+        final FiscalYear newFiscalYear = createNewFiscalYear();
 
         warehouseService.getAll().forEach(warehouse ->
             articleService.getAll().forEach(article ->
                 createNewArticleCard(oldFiscalYear, warehouse, article)
             )
         );
+
+        fiscalYearCurrent.setCurrentFiscalYear(newFiscalYear);
     }
 
     private void createNewArticleCard(FiscalYear oldFiscalYear, Warehouse warehouse, Article article) {
@@ -57,8 +59,8 @@ public class FiscalYearService {
 
         final ArticleCard newArticleCard = new ArticleCard();
         newArticleCard.setArticle(article);
-        newArticleCard.setFiscalYear(this.currentFiscalYear);
-        newArticleCard.setStartStatePrice(oldArticleCard.getPrice());
+        newArticleCard.setFiscalYear(this.getCurrent());
+        newArticleCard.setStartStateValue(oldArticleCard.getValue());
         newArticleCard.setStartStateQuantity(oldArticleCard.getQuantity());
         newArticleCard.setWarehouse(warehouse);
         articleCardService.save(newArticleCard);
@@ -68,9 +70,11 @@ public class FiscalYearService {
     private FiscalYear createNewFiscalYear() {
         final FiscalYear newFiscalYear = new FiscalYear();
         newFiscalYear.setStartedOn(Utils.getCurrentTimestamp());
-        newFiscalYear.setYear(currentFiscalYear.getYear() + 1);
+        newFiscalYear.setYear(this.getCurrent().getYear() + 1);
         fiscalYearRepository.save(newFiscalYear);
         return newFiscalYear;
     }
+
+
 
 }

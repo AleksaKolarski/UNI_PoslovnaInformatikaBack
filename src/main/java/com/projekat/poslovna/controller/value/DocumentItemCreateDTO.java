@@ -14,7 +14,7 @@ public class DocumentItemCreateDTO {
     private int quantity;
 
     @Positive
-    private long price;
+    private Long price;
 
     @Positive
     private int articleId;

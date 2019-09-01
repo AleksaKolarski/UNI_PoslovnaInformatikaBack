@@ -4,9 +4,14 @@ import com.projekat.poslovna.entity.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by milan.miljus on 8/25/19 1:18 PM.
  */
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Integer> {
+
+    List<Document> getByFiscalYearId(int fiscalYearId);
+
 }

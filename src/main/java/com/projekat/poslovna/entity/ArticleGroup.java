@@ -1,7 +1,8 @@
 package com.projekat.poslovna.entity;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +14,8 @@ import java.util.List;
  * Created by milan.miljus on 2019-04-27 17:26.
  */
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ArticleGroup extends BaseEntity {
 

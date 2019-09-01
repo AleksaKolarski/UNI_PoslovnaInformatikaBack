@@ -16,7 +16,7 @@ public class Utils {
     }
 
     public static Timestamp getCurrentTimestamp() {
-        final Date date= new Date();
+        final Date date = new Date();
         long time = date.getTime();
         return new Timestamp(time);
     }

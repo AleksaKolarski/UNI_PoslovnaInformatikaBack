@@ -18,8 +18,6 @@ public class ArticleDTO {
 
     private UnitEnum unit;
 
-    private int meanPrice;
-
     @NotNull
     private ArticleGroupDTO articleGroup;
 

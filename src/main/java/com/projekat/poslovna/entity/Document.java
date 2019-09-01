@@ -3,9 +3,9 @@ package com.projekat.poslovna.entity;
 import com.projekat.poslovna.entity.enums.DocumentStatus;
 import com.projekat.poslovna.entity.enums.DocumentType;
 import com.projekat.poslovna.entity.exception.DocumentNotValidException;
+import com.projekat.poslovna.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -13,18 +13,18 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * Created by milan.miljus on 2019-04-27 19:34.
- */
+
 @Entity
 @Getter
 @Setter
 public class Document extends BaseEntity {
 
-    @CreationTimestamp
+    @NotNull
     private Timestamp formedOn;
+
     private Timestamp bookedOn;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private DocumentStatus status = DocumentStatus.FORMED;
 
@@ -36,7 +36,7 @@ public class Document extends BaseEntity {
     private FiscalYear fiscalYear;
 
     @NotEmpty
-    @OneToMany(mappedBy = "document", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "document", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<DocumentItem> documentItems;
 
     @ManyToOne
@@ -45,12 +45,36 @@ public class Document extends BaseEntity {
     @ManyToOne
     private BusinessPartner businessPartner;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private DocumentType documentType;
+
+    public void form() {
+        this.status = DocumentStatus.FORMED;
+        this.formedOn = Utils.getCurrentTimestamp();
+    }
+
+    public void book() {
+        this.status = DocumentStatus.BOOKED;
+        this.bookedOn = Utils.getCurrentTimestamp();
+    }
+
+    public Document() {
+        this.form();
+    }
+
     @PrePersist
-    private void check() {
-        getDocumentType(
-                this.sourceWarehouse != null ? this.sourceWarehouse.getId() : null,
-                this.targetWarehouse != null ? this.targetWarehouse.getId() : null,
-                this.businessPartner != null ? this.businessPartner.getId() : null
+    private void setDocumentType() {
+        this.documentType = getDocumentType();
+    }
+
+    public DocumentType getDocumentType() {
+        return this.documentType != null
+                ? this.documentType
+                : getDocumentType(
+            this.sourceWarehouse != null ? this.sourceWarehouse.getId() : null,
+            this.targetWarehouse != null ? this.targetWarehouse.getId() : null,
+            this.businessPartner != null ? this.businessPartner.getId() : null
         );
     }
 
