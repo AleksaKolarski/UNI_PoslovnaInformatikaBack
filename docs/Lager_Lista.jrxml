@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.9.0.final using JasperReports Library version 6.9.0-cb8f9004be492ccc537180b49c026951f4220bf3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Lager_Lista" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c7658077-e350-47b5-85f3-378c8e506f2d">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="231"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="761"/>
+	<parameter name="WarehouseIdParameter" class="java.lang.Integer">
+		<parameterDescription><![CDATA[Prosledjeni id za magacin ciji lager prikazujemo]]></parameterDescription>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[SELECT poslovna.warehouse.name,
+	poslovna.article.name,
+	poslovna.article.unit,
+	poslovna.article.id,
+	poslovna.article_card.in_quantity,
+	poslovna.article_card.out_quantity,
+	poslovna.article_card.in_value,
+	poslovna.article_card.out_value,
+	poslovna.article_card.start_state_quantity,
+	poslovna.article_card.start_state_value
+FROM poslovna.article_card
+	INNER JOIN poslovna.article ON 
+	 poslovna.article_card.article_id = poslovna.article.id 
+	INNER JOIN poslovna.warehouse ON 
+	 poslovna.article_card.warehouse_id = poslovna.warehouse.id
+WHERE poslovna.warehouse.id=$P{WarehouseIdParameter}]]>
+	</queryString>
+	<field name="WarehouseName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="warehouse"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="1"/>
+	</field>
+	<field name="ArticleName" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="2"/>
+	</field>
+	<field name="unit" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="unit"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="3"/>
+	</field>
+	<field name="ArticleId" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="4"/>
+	</field>
+	<field name="in_quantity" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="in_quantity"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article_card"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="5"/>
+	</field>
+	<field name="out_quantity" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="out_quantity"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article_card"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="6"/>
+	</field>
+	<field name="in_value" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="in_value"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article_card"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="7"/>
+	</field>
+	<field name="out_value" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="out_value"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article_card"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="8"/>
+	</field>
+	<field name="start_state_quantity" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="start_state_quantity"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article_card"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="9"/>
+	</field>
+	<field name="start_state_value" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="start_state_value"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="article_card"/>
+		<property name="net.sf.jasperreports.sql.field.column.index" value="10"/>
+	</field>
+	<variable name="calculated_quantity" class="java.lang.Integer">
+		<variableExpression><![CDATA[($F{start_state_quantity} + $F{in_quantity} - $F{out_quantity})]]></variableExpression>
+	</variable>
+	<variable name="calculated_value" class="java.lang.Long">
+		<variableExpression><![CDATA[($F{start_state_value} + $F{in_value} - $F{out_value})]]></variableExpression>
+	</variable>
+	<variable name="calculated_price" class="java.lang.Double">
+		<variableExpression><![CDATA[new Double($V{calculated_quantity}.doubleValue() == 0 ? 0 : ($V{calculated_value}.doubleValue()/$V{calculated_quantity}.doubleValue()))]]></variableExpression>
+	</variable>
+	<variable name="total_value" class="java.lang.Long" calculation="Sum">
+		<variableExpression><![CDATA[$V{calculated_value}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="220" y="0" width="120" height="24" uuid="022f9609-ab3b-4880-83bd-d73fe31854f1">
+					<property name="com.jaspersoft.studio.element.name" value="Title"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Lager lista]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="500" y="0" width="55" height="20" uuid="43c3c3ec-63fb-4628-9dcf-8cc712bf9fdb">
+					<property name="com.jaspersoft.studio.element.name" value="redniBrojStrane"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy">
+				<reportElement x="500" y="20" width="55" height="20" uuid="7ea5c8e1-97ac-4480-bae4-5df8efa0d769">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="0" width="40" height="20" uuid="59f468e9-f7ff-43b9-aacf-0b0bab2a2250"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Strana:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="20" width="40" height="20" uuid="88e5e882-8fd3-4992-b07b-5affb67b00c1"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Datum:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="20" uuid="91101253-1fef-4450-9b46-b0afe70c4bf6"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nase preduzece]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="60" y="20" width="200" height="20" uuid="223b2068-8eff-4567-bd5e-117063bb77fb"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{WarehouseName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="50" height="20" uuid="2835cb4a-5189-4053-8b8f-96f5f4bca7e7"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[MAGACIN:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35">
+			<staticText>
+				<reportElement x="0" y="10" width="80" height="20" uuid="87025ba1-e882-4128-8897-36a4efcca8ca"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Sifra art.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="10" width="76" height="20" uuid="8788d36b-6838-45aa-a9d4-788a9bb97750"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Jed. mere]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="156" y="10" width="114" height="20" uuid="1f78ba77-0673-48b6-93c6-77b02b003041"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Naziv artikla]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="10" width="80" height="20" uuid="710c1abb-1d36-42b2-8aad-dbb04a5d1aca"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Kolicina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="10" width="80" height="20" uuid="ad3878ce-0df6-49ea-98ae-350006552758"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Kalk. cena]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="10" width="105" height="20" uuid="5db8f141-2402-4098-be89-c3aaf8cedb7b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Vrednost po kalk. ceni]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="34" width="555" height="1" uuid="d10b8d83-0466-41ee-810b-f3ba70d1f0e7">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" uuid="7fe7369a-d297-471d-a086-599f679ba3db"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ArticleId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="0" width="76" height="20" uuid="aa55fba0-0776-4498-86d1-a7d021afc118"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="156" y="0" width="114" height="20" uuid="0963aa5e-4621-40c2-b8d5-fd7c70224671"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ArticleName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="80" height="20" uuid="f59879e3-2ae0-4d2b-ad01-0536e49872c4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{calculated_quantity}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="360" y="0" width="80" height="20" uuid="56d0fe2e-52cf-4828-a28e-565d3dbf889c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{calculated_price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="0" width="105" height="20" uuid="04ed36d0-7c7e-4cd7-b2b5-334e51fcd979"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{calculated_value}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="174" height="20" uuid="0cd06995-ad02-4bbf-9134-6330d62b4e15"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[UKUPNA VREDNOST ZALIHA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="191" y="10" width="364" height="20" uuid="3f4c6ea5-0ee2-4726-8c42-84b5ab2775cf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{total_value}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="2" width="555" height="1" uuid="a965f3c5-0f11-4ed3-871f-56a26c0b068d">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</summary>
+</jasperReport>
