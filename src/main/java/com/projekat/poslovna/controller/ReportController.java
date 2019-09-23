@@ -52,7 +52,7 @@ public class ReportController {
 	}
 	
 	@GetMapping("/articleCardAnalytics/{warehouseId}/{articleId}/{fiscalYearId}")
-	public ResponseEntity<Resource> downloadArticleCardAnalyticsReport(@PathVariable int warehouseId, @PathVariable int articleId, @PathVariable int fiscalYearId){
+	public ResponseEntity<?> downloadArticleCardAnalyticsReport(@PathVariable int warehouseId, @PathVariable int articleId, @PathVariable int fiscalYearId){
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("WarehouseId", warehouseId);
@@ -75,7 +75,7 @@ public class ReportController {
 			
 		} catch (JRException | IOException e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No changes yet");
 		}
 	}
 }
